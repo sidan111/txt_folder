@@ -1,0 +1,99 @@
+##  VSCode  ##
+1. Korean Language Pack for Visual Studil Code
+   : 한국어 패치 
+2. ROS (Microsoft)   :   Pylance, Python, Python Debugger 등 자동 설치됨   
+3. C/C++ Extension Pack
+4. YAML
+   : ROS에서 설정 파일로 많이 사용하는 확장자
+5. UDRF
+   : ROS에서 주로 사용되는 로봇 모델을 시뮬레이션하고 시각화하는데 필수적인 역할
+6. CMake Tools
+   : ROS2에서 패키지를 빌드하고 관리하기 위한 도구
+7. vscode-icons
+   : 깔끔하고 이해하기 쉬운 아이콘을 설정함으로써, 사용자가 패키지 구조와 파일을 더 쉽게 식별하고 탐색할 수 있도록 도와줌
+   
+
+## Ubuntu 22.04 ##
+1. sudo apt-get install g++
+   : ROS2는 C++로 작성된 노드와 패키지를 포함하고 있어, ROS2에서 C++로 개발하거나 관련된 실습을 위해 필요
+
+2. Humble 설치 
+  1) ROS2 apt 저장소 추가
+     - Ubuntu Universe 저장소가 활성화 되어 있는지 확인
+        sudo apt install software-properties-common
+        sudo add-apt-repository universe
+     - apt 를 사용하여 ROS2 GPS 키 추가
+        sudo apt update && sudo apt install curl -y
+        sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+     - 소스 목록에 저장소 추가
+       echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+     - apt 업데이트
+       sudo apt update 
+     - ROS2 설치
+       sudo apt install ros-humble-desktop
+     - ROS2 개발 도구 설치
+       sudo apt install ros-dev-tools
+     - ROS2 의존성 패키지 설치 : 해당 소프트웨어나 패키지가 올바르게 작동하기 위해 필요한 요소
+       sudo apt update && sudo apt install -y \python3-flake8-docstrings \python3-pip \python3-pytest-cov
+       sudo apt install -y \python3-flake8-blind-except \python3-flake8-builtins \python3-flake8-class-newline \python3-flake8-comprehensions \python3-flake8-deprecated \python3-flake8-import-order \python3-flake8-quotes \python3-pytest-repeat \python3-pytest-rerunfailures
+
+     - Fast-DDS 의존성 설치 : ROS2의 데이터 전송 기능을 구현하기 위한 필수 라이브러리
+       sudo apt install --no-install-recommends -y \libasio-dev \libtinyxml2-dev
+     - ROS2 설치 확인
+       cd /opt/ros/humble
+
+
+  2) ROS2 명령어 설정                                  
+      - .bashrc : 터미널 실행할 때마다 ROS2 환경설정 적용될 수 있도록
+        ㄱ) Home 폴더에서 "ctrl + H : 숨겨진 파일 보이기" 누른후 .bashrc 메모장 열고, 
+        ㄴ) # ROS2 Setup                                                # 119열에 붙여넣기할 것
+            source /opt/ros/humble/setup.bash
+            # source ~/ros2_ws/install/local_setup.bash               .
+      - ROS2 테스트
+        ㄱ) 1번 터미널
+           ros2 run demo_nodes_cpp listener
+        ㄴ) 2번 터미널
+           ros2 run demo_nodes_cpp talker
+
+  3) ROS2 작업공간 생성
+      - ROS2 테스트 
+        mkdir -p ros2_ws/src          # ros2_ws/src 폴더 만들기
+      - 작업공간 빌드
+        colcon build --symlink-install    # colcon이라는 빌드 툴을 사용해 ROS2 패키지 빌드
+                                                # --symlink-install 옵션을 사용하면, 파일의 사본을 만들지 않고 원본 파일에 대한 링크생성,
+                                                  패키지를 수정하였을 때 매번 빌드할 필요없이 변경 사항이 즉시 반영
+
+  4) ROS2 예제) TurtleSim 터틀심
+     - TurtleSim 패키지 설치 
+       sudo apt update
+       sudo apt install ros-humble-turtlesim
+       ros2 pkg executables turtlesim              # turtlesim 실행파일 목록 확인     
+     
+    -  거북이 화면 띄워서 사용하기
+       ros2 run turtlesim turtlesim_node           # TurtleSim 실행
+       ros2 run turtlesim turtle_teleop_key         # 거북이를 제어하기 위해 새 노드 실행
+
+    - ROS2 실행 리스트
+      ros2 node list
+      ros2 topic list
+      ros2 service list
+      ros2 action list
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

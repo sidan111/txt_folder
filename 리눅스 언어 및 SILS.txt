@@ -1,0 +1,224 @@
+mkdir   /  mv   /   cp   /    rm  /    gedit   =   vi     /   cat
+-v or --vehicle  /  -f or --frame    /    --map     /    --console    /    -L or --location    /  --wind    /  
+-w or --wipe-eeprom : eeprom(드론의 보조 기억장치)를 지우고 시작함, 사전에 설정된 Mission 등이 삭제됨
+--master : 드론과 통신할 주요 연결을 설정함(ex:  --master tcp:127.0.0.1:5760 or --master/dev/ttyACM0 or --master:192.168.10.1:5760)
+--out(= -o) 추가 출력 연결을 설정. 데이터를 다른 시스템으로 전달 가능(ex:out 127.0.0.1:14550)
+--baudrate(= -b) : 시리얼 연결의 전송 속도를 설정함(ex: --baudrate 57600 )
+--aircraft(= -a) : 비행 데이터를 저장할 디렉토리를 설정함(ex: --aircraft MyDrone)
+--sitl : SITL 인스턴스에 대한 연결 정보를 설정함(ex: --sitl 127.0.0.1:5501)  
+tcp : 정보를 주고 받음  /  udp : 정보를 일방적으로 받음
+chmod +x : 실행권한 주기 (ex: chmod +x ardu-sim.sh)
+
+
+✅ ardupilot - QGC, mission planner, mavproxy - pymavlink 
+   px4 - QGC, gazebo, jmavsim - mavsdk 
+
+
+Ardupilot  : ardupilot.org/dev/
+Ardupilot github : github.com/ArduPilot/ardupilot
+Mission Planner : ardupilot.org/planner/
+
+
+cp $HOME/ardupilot/Tools/autotest/default_params/copter.parm $HOME/ardu-sim/parameters/copter.parm
+cp $HOME/ardupilot/Tools/autotest/default_params/plane-jet.parm $HOME/ardu-sim/parameters/plane.parm
+cp $HOME/ardupilot/Tools/autotest/default_params/rover.parm $HOME/ardu-sim/parameters/rover.parm
+
+
+./arducopter -S --model copter --speedup 1 --defaults parameters/copter.parm-I0 --home 37.550499,127.075086,0,0
+mavproxy.py --master tcp:127.0.0.1:5760 --map --console
+
+./arduplane-S --model plane --speedup 1 --defaults parameters/plane.parm-I0  --home 37.5503,127.0749,0,0
+mavproxy.py --master tcp:127.0.0.1:5760 --map   --consol
+
+
+sim_vehicle.py -v ArduCopter -f quad  --map --console  -L 37.5503,127.0749
+
+✅  mavproxy 창에서 사용하는 명령어  ✅
+mode guided        (guided 모드로 변경)
+arm throttle
+takeoff 50
+land
+rtl
+mode stabilize       (stabilize 모드로 변경하기)
+mode auto
+guided 37.5507 127.0747 30    / 위도 경도 고도
+
+position 10 0 0    /    position 0 20 0    /    position 0 0 -10   
+param show disarm_delay    (arm throttle 시간 보기)
+param set disarm_delay 30   (arm throttle 30초로 연장) 
+module load misseditor       (mission editor 창 띄우기)
+module unload misseditor                                         ## module 참고 : https://ardupilot.org/mavproxy/docs/modules/index.html
+module load map = --map
+module load console = --console
+param show sim_speedup    (기체 이륙속도 보기)
+param set sim_speedup 2    (기체 이륙속도 2로 올리기)
+time                               (현재 시간)
+status                             (현재 상태)
+bat                                (배터리 상태 확인)
+batreset                          (배터리 100%로 초기화)
+
+✅  screen 명령어 : "ardu-sim 디렉토리"에서 실행함  ✅
+screen -list                        현재 실행중인 screen session 보여줌
+screen -r proxy                  현재 실행중인 screen session 보여줌
+screen -r vehicle                 vehicle 콘솔 보임
+screen -S vehicle -X quit       vehicle 세션 종료 
+screen -S proxy -X quit         vehicle 세션 종료 
+killall screen                       모든 세션 종료
+
+✅  Pymavlink Mavlink 메시징 : mavutil 모듈의 기능 - MAVLink 메시지의 해석, 시간 변환, 유닛의 변환 등 다양한 유틸리티 기능을 제공함 
+mavlink_connection()  : 주어진 설정에 따라  Mavlink 연결 생성(시리얼,UDP,TCP,파일)
+wait_heartbeat()         : "하트비트" 메시지(의도적 통신지원)
+recv_match()             : Mavlink 장치로부터 들어오는 메시지를 수신
+send()                     :  Mavlink 장치로 메시지를 전송
+
+
+✅  Pymavlink parameter 용어  ✅
+target_system               UAV 시스템의 ID
+target_component         컴포넌트의 ID
+seq                            미션 아이템의 시퀀스 번호
+frame                         좌표계를 정의함 -LOCAL(로컬) 또는 GLOBAL(글로벌)
+command                    어떤 작업을 수행할 지 정의하는 MAVLink 명령어
+current                       이 미션 아이템이 현재 실행 중인지 여부
+autocontinue                현재 미션 아이템이 완료되면 다음 미션 아이템으로 자동으로 넘어갈지 여부 정의
+param1 to param4          명령어에 따른 추가 매개변수
+x, y, z                          미션 아이템의 위치를 정의함(frame이 LOCAL이면 미터 단위의 3차원의 자표,
+                                                                      GLOBAL 이면 위도, 경도, 고도를 나타냄)
+
+
+✅  dialects.v20.all의 기능  ✅
+cd .local/lib/python3.8/site-packages/pymavlink/dialects/v20
+/.local/lib/python3.8/site-packages/pymavlink/dialects/v20$ gedit all.py
+
+
+✅  5760 기체 + mavproxy 맵과 콘솔 띄우기  ✅  
+./arducopter -S --model copter --speedup 3 --defaults parameters/copter.parm -I0 --home 37.5503,127.0749,0,0  
+ (ardu-sim 디렉토리)
+mavproxy.py --master tcp:127.0.0.1:5760 --map --console
+  (ardu-sim 디렉토리)
+
+
+✅  5760 기체 + QGroundControl 창 띄우기  ✅
+./arducopter -S --model copter --speedup 3 --defaults parameters/copter.parm -I0 --home 37.5503,127.0749,0,0
+  (ardu-sim 디렉토리)
+mavproxy.py --master tcp:127.0.0.1:5760 --out udp:127.0.0.1:14550 --console --map
+  (ardu-sim 디렉토리)
+./QGroundControl.AppImage
+  (Download 디렉토리)
+
+✅  5760 포트를 2군데 이상의 14550으로 보낼 수 있음  ✅
+mavproxy.py --master tcp:127.0.0.1:5760 --out udp:127.0.0.1:14550 --out udp:192.168.45.124:14550 --map
+                                                                   본인 컴 QGC                        다른 컴 QGC
+
+✅  드론과 연결된 USB 통신포트 설정   ✅
+mavproxy.py --master /dev/ttyUSB0 --baudrate 57600 --out udp:127.0.0.1:14550 --out udp:192.168.45.124:14550 --map
+
+✅  5760 포트를 QGC와 비쥬얼 스튜디오(code .)로 연결하기  ✅
+./arducopter -S --model copter --speedup 3 --defaults parameters/copter.parm -I0 --home 37.5503,127.0749,0,0
+  (ardu-sim 디렉토리)
+mavproxy.py --master tcp:127.0.0.1:5760 --out udp:127.0.0.1:14550 --out udp:127.0.0.1:14560
+  (ardu-sim 디렉토리)
+./QGroundControl.AppImage
+  (Download 디렉토리)
+code .
+  (Pymavlink-my 디렉토리)
+
+✅  14550 : GCS   /  14560 : visual studio code
+
+✅   SCREEN 기능과 비쥬얼 스튜디오(code .) 연결하기 
+./ardu-sim.sh
+  (ardu-sim 디렉토리)
+code .
+  (Pymavlink-my 디렉토리)
+visual studio code 에서 좌측 파이썬 디렉토리 선택하면 연결됨 
+  (Target System: 1 target Conponent: 0)
+
+
+✅   FLTMODE_CH : 1230	
+Stabilize : 0   Acro : 1  AltHold : 2   Auto : 3   Guided : 4   Loiter : 5   RTL : 6   Circle : 7   Land : 9    Drift : 11   Sport : 13   Flip : 14   
+ 
+arming : 400   /    mode_chage : 176    /   takeoff : 22   /   land : 21
+
+
+✅  기체에 접속 (중~~~~ 요)   ✅
+vehicle = utility.mavlink_connection(device="udpin:127.0.0.1:14560")
+vehicle = utility.mavlink_connection('/dev/ttyUSB0', 57600)	         #Telemetry # cd /dev/  여기서 맞는 포트 확인가능하세요
+vehicle = utility.mavlink_connection('/dev/ttyACM0', 57600)	         #usb # cd /dev/ 여기서 자기컴에 맞는 포트 확인가능하세요
+
+
+
+✅  군집드론  ✅
+sim_vehicle.py -v ArduCopter -f quad --console --map -I 1 --out=udp:127.0.0.1:14550 --sysid=2  -L 37.5503,127.0749
+  (ardu-sim 디렉토리)
+sim_vehicle.py -v ArduCopter -f quad --console --map -I 2 --out=udp:127.0.0.1:14550 --sysid=3  -L 37.5516,127.0741
+  (ardu-sim 디렉토리)
+./QGroundControl.AppImage
+  (Download 디렉토리)
+
+export PATH=/opt/gcc-arm-none-eabi-9-2020-q2-update/bin:/home/dronedev/.local/bin:/usr/-local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/-bin:/home/dronedev/.local/bin:/home/dronedev/ardupilot/Tools/autotest
+
+
+✅   px4 펌웨어 및 jmavsim, gazebo 설치 순서   ✅ 
+1. git clone https://github.com/PX4/PX4-Autopilot.git --recursive
+  ($HOME 디렉토리)
+
+2. MAVSDK 라이브러리 다운 : https://github.com/mavlink/MAVSDK/releases/ download/v1.4.15/libmavsdkdev_1.4.15_ubuntu20.04_amd64.deb
+   (Downdloads 디렉토리에서 확인할 것)
+
+3. sudo dpkg-i libmavsdk-dev_1.4.15_ubuntu20.04_amd64.deb
+  (Downdloads 디렉토리)
+
+4. cd Tools/
+  (PX4-Autopilot 디렉토리)
+
+   cd setup/
+  (PX4-Autopilot/Tools 디렉토리)
+
+   ls -l        =>     "ubuntu.sh" 파일 확인
+  (PX4-Autopilot/Tools/setup 디렉토리)   
+
+   bash &HOME/PX4-Autopilot/Tools/setup/ubuntu.sh
+  (PX4-Autopilot/Tools/setup 디렉토리)
+
+5. ✅                             Vehicle                                                             	Command
+                (PX4-Autopilot 디렉토리)                                                    make px4_sitl_default jmavsim
+                Quadrotor                                                                      make px4_sitl gazebo-classic
+                Quadrotor with Optical Flow                                                make px4_sitl gazebo-classic_iris_opt_flow
+                Quadrotor with Depth Camera (forward-facing)     	                   make px4_sitl gazebo-classic_iris_depth_camera
+                Quadrotor with Depth Camera (downward-facing)	                   make px4_sitl gazebo-classic_iris_downward_depth_camera
+                3DR Solo (Quadrotor)	                                                   make px4_sitl gazebo-classic_solo
+                Typhoon H480 (Hexrotor) (supports video streaming)	           make px4_sitl gazebo-classic_typhoon_h480
+
+
+
+
+
+
+✅   px4 (pxh>) 명령어  ✅
+commander arm
+commander takeoff
+commander land
+
+
+✅  mavsdk-python 설치  ✅
+1. pip3 install mavsdk
+  (PX4-Autopilot 디렉토리)
+
+2. pip3 install aioconsole
+  (PX4-Autopilot 디렉토리)
+
+3. apython (mavsdk-python 명령창), (별도의 "비동기" 방식의 명령창 : ">>>")  :   "apython 창 닫기 -  ctrl + z " 
+  (PX4-Autopilot 디렉토리)
+
+✅  mavsdk-python 명령어  ✅
+>>> from mavsdk import System 
+>>> drone = System()
+>>> await drone.connect()
+>>> await drone.action.arm()
+>>> await drone.action.takeoff()
+>>> await drone.action.land()
+
+✅  mavsdk-python 명령어 예제  ✅
+1. mavsdk python 검색 - github : mavlink/MAVSDK-Python 선택 - code 복사 (https://github.com/mavlink/MAVSDK-Python.git) -
+git clone https://github.com/mavlink/MAVSDK-Python.git (&HOME 디렉토리) 
+
+2. 

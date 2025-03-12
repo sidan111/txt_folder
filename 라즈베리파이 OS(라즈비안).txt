@@ -1,0 +1,6 @@
+
+
+- https://www.raspberrypi.com/software/operating-systems/     
+- 데스크탑 및 권장 소프트웨어가 포함된 Raspberry Pi OS
+
+- 라즈비안을 설치한 sd카드 포멧 - "sdformatter" 로 포멧

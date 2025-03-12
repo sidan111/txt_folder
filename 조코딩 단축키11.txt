@@ -1,0 +1,245 @@
+cmd 창 : cd C:\python        C:\python>python hello.py                https://pythontutor.com/render.html#mode=display
+
+** 파이썬 모듈이나 패키지 찾는 곳 :   https://pypi.org/
+
+cls(VS code) : 터미널 창 정리  /   clear(파이썬) : 터미널 창 정리 
+print(type()) : class 타입 확인  
+
+add : 더하기     sub : 빼기    mul : 곱하기    div : 나누기
+
+** PYTHONPATH 설정 방법(Linux/macOS)
+  - export PYTHONPATH="/my/custom/path:$PYTHONPATH"       : 일시적 설정(해당 터미널(세션)에서만 적용)
+  - source -/ .bashrc                                                       : 영구적 설정
+
+
+***  자료형 총정리(정수,실수,문자열,리스트,튜플,딕셔너리,집합,불)   ***
+* Mutable : 리스트, 딕셔너리, 집함    /    Immutable : 정수, 실수, 문자열, 튜플
+
+* 숫자열 : 정수, 실수,,,    [사칙연산 등 : +     -     *     /      **(x의 y제곱)     //(몫)    %(나머지)]
+* 문자열(str) : '  ',   '''   ''',   "  ",   """  """      
+      - 이스케이프 코드 : \n(문자열 안에서 줄 바꿈)   \t(문자열 사이에 탭 간격 줄때)   \\(\를 그대로 사용)    \'('를 그대로 사용)    \"("를 그대로 사용)
+      - 짝수 : num % 2 == 0    
+      - len(a) : 문자열 길이 
+      - 인덱싱(가리킨다) :                       슬라이싱(잘라 낸다) : 
+          a[ ]                                     a[      :     ]      a[      :      :     ]  
+                                                      이상 미만        이상 미만 간격
+
+      - 문자열 포매팅 : %d(정수)     %s(문자열)   %f(부동소수)      /   최신 포매팅     ex) name = '홍길동'
+                                                                                     (f문자열 포매팅)      age = 10
+                                                                                                               a = f"나의 이름은 {name}입니다. 나이는 {age}입니다"
+                                                                                                               print(a) 
+
+      - 문자열 관련 함수들 : a.count( )(문자 개수 세기)    a.find( )/index( )(위치 알려주기)     a.join( )(문자열 삽입)     a.upper( )(소문자를 대문자로 바꾸기)
+                                  a.lower( )(대문자를 소문자로 바꾸기)      a.lstrip( )(왼쪽 공백 지우기)    a.rstrip( )(오른쪽 공백 지우기)    a.strip( )(양쪽 공백 지우기)
+                                  a.replace( )(문자열 바꾸기)      a.split( )(문자열 나누기)     
+
+* 리스트(list) : (서랍장이라 생각하면 편함)      a =  [   ,   ,   ,   ]     /    a = [  ,  ,  ['  ', '  ', '  ']]    /    a = [  ,  , [' ', ' ', [' ', ' ']]]
+               - 리스트의 인덱싱                    print(a[ ])                     print(a[ ][ ])                        print(a[ ][ ][ ])
+               - 리스트의 슬라이싱                 a =  [   ,   ,   ,   ]     /    a = [  ,  ,  ['  ', '  ', '  ']]    /    a = [  ,  , [' ', ' ', [' ', ' ']]]
+                                                         print(a[ : ])                  print(a[ ][ : ])                       print(a[ ][ : ][ : ])
+               - 리스트의 연산 :     리스트 더하기(+)                     리스트 반복하기( * )
+                                          a = [1, 2, 3]                             a = [1, 2, 3]
+                                          b = [4, 5, 6]                            print(a*3)
+                                          print(a + b)                             [1, 2, 3, 1, 2, 3, 1, 2, 3] 
+                                          [1, 2, 3, 4, 5, 6]
+               - 리스트의 길이 :      a = [1, 2, 3]     /     리스트의 값 수정 :   a = [1, 2, 3]    /   리스트  요소 삭제(del)    a = [1, 2, 3]   /   a = [1, 2, 3, 4, 5]
+                                          print(len(a))                                     a[2] = 4                                                  del a[1]        del a[2:]
+                                          3                                                  print(a)                                                   print(a)         print(a)
+                                                                                        [1, 2, 4]                                                   [1, 3]           [1, 2]
+               - 리스트 연산 오류 주의 :       a = [1, 2, '3']                   /          a = [1, 2, '3']  
+                                                     print(a[2] + "hi")                          print(str[2] + "hi")
+                                                     3hi                                          3hi  
+
+               - 리스트 관련 함수들 : a.appen( )(요소 추가)     a.sort( )(요소 정렬)     a.reverse( ) (뒤집기)    a.index( ) (반환)     a.insert( )(요소 삽입)
+                                            a.remove( )(요소 제거)   a.pop( )(요소 끄집에 내기)  a.count( )(리스트에 포함된 요소 x의 개수 세기)
+                                            a.extend( )(확장)          a.copy( ) 
+
+* 튜플 : t1 = ( )   /    t2 = (1, )    /   t3 = (1, 2, 3)    /    t4 = 1, 2, 3    /    t5 = ('a', 'b', ('ab', 'cd))
+          - 튜플은 변경, 삭제가 안됨  /  인덱싱, 슬라이싱 가능  /  더하기, 곱하기 가능(실제 더하기, 곱하기 개념이 아님)   
+            /  sort, insert, remove, pop 과 같은 내장함수 안됨 
+
+* 딕셔너리(dic) : - {키(key): 값(value)} 의 패턴으로 표현 {키1:밸류1, 키2:밸류2, 키3:밸류3, ---}
+                     딕셔너리 쌍 추가   a = {1: 'a'}                     a = {1: 'a'}                                        a = {1: 'a'}
+                                             a[2] = 'b'                      a[2] = 'b'                                          a[2] = 'b'
+                                               키    값                      a['name'] = 'pey'                                a['name'] = 'pey'
+                                             print(a)                          print(a)                                           a[3] = [1, 2, 3] 
+                                             {1: 'a', 2: 'b'}                   {1: 'a', 2: 'b', 'name', 'pry'}                     print(a)
+                                                                                                                               {1: 'a', 2: 'b', 'name', 'pry', 3: [1,2,3]}     
+                - 삭제 : a = {키1:밸류1, 키2:밸류2, 키3:밸류3, ---}       /      키를 이용해 값 불러오기 :  dic = {'pey': 10, 'julliet': 99}
+                          del a[키1], a[키2], - -                                                                         print(dic['pey'])
+                          print(a)                                                                                          10
+                - 딕셔너리에는 동일한 Key가 중복으로 존재할 수 없다.
+                - 리스트를 Key로 설정하면 리스트를 키 값으로 사용할 수 없다.  ex)  a = {[1,2] : 'hi'}     =>  error
+                - 딕셔너리 관련 함수 :  a.keys( )(Key 리스트 만들기)                 a.values( )(Value 리스트 만들기)          a.items( )(Key, Value 쌍 얻기)
+                                              a.clear( )(Key: Value 쌍 모두 지우기)       
+                                              a.get( )(Key로 Value 얻기)      a = {'name': 'pey', 'phone': '010-9999-1234', 'birth': '1118'}
+                                                                                    print(a.get('birth'))
+                                                                                    print(a['birth']) 
+                                                                                    1118 
+                                                                                    1118
+                                             'Key' in a (in: 해당 Key가 딕셔너리(a) 안에 있는지 조사하기)
+
+* 집합(set) : set 키워드 사용  /  중복을 허용하지 않는다  /  순서가 없다(index 가 허용 안됨)
+               s1 = set([1, 2, 3])                    s2 = {1, 2, 3}
+               print(s1)                               print(s2)
+               {1, 2, 3}                                {1, 2, 3}
+               - & (교집합)        | (합집합)          - (차집합)
+               - 집합 관련 함수 :      a.add( )(값 1개 추가하기)         a.update( )(값 여러 개 추가하기)         a.remove( )(특정 값 제거하기)
+ 
+* 불(불리언) :   참(True)과 거짓(False)을 나타내는 자료형   /   "  ==  ,  <   ,   >  " 를 이용해 "불" 만들수 있음
+                                        값         참 or 거짓
+                                   "python"         참
+                                       ""	      거짓
+                                   [1, 2, 3]          참
+                                      []	              거짓
+                                   (1, 2, 3)          참
+                                      ()	             거짓
+                                    {'a': 1}           참
+                                      {}             거짓
+                                      1	              참
+                                      0	            거짓
+                                   None	    거짓
+
+                        -  bool 함수를 사용하면 자료형의 참과 거짓을 보다 정확하게 식별할 수 있다
+
+
+***   제어문   ***
+if 문 :          if 조건문:                           x < y  	x가 y보다 작다.                     x or y     x와 y 둘 중 하나만 참이어도 참        x in 리스트	   x not in 리스트
+                     수행할_문장1                  x > y 	x가 y보다 크다.                     x and y   x와 y 모두 참이어야 참                  x in 튜플	   x not in 튜플 
+                     수행할_문장2                  x == y	x와 y가 같다.                        not x	     x가 거짓이면 참                           x in 문자열  	   x not in 문자열
+                      ...                               x != y	x와 y가 같지 않다.
+                 else:                                x >= y	x가 y보다 크거나 같다.
+                     수행할_문장A                 x <= y	x가 y보다 작거나 같다.
+                     수행할_문장B
+                      ...
+               - psss : 가끔 조건문의 참, 거짓에 따라 실행할 행동을 정의할 때나 아무런 일도 하지 않도록 설정하고 싶을 때
+
+                        if 조건문:                               * elif는 이전 조건문이 거짓일 때 수행된다 
+                            수행할_문장1                        elif는 개수에 제한 없이 사용할 수 있다.
+                            수행할_문장2
+                             ...
+                        elif 조건문:
+                            수행할_문장1
+                            수행할_문장2
+                            ...
+                        elif 조건문:
+                            수행할_문장1
+                            수행할_문장2
+                            ...
+                        ...
+                       else:
+                           수행할_문장1
+                           수행할_문장2
+                           ... 
+
+* while 문 :                  while 조건문:              조건문이 참인 동안 while 문에 속한 문장들이 반복해서 수행된다.
+                                   수행할_문장1         continue : while 문 안의 문장을 수행하는 도중 continue 문을 만나면 while 문의 처음으로 돌아가게 된다.
+                                   수행할_문장2         break :     
+                                   수행할_문장3
+                                   ...
+
+* for 문 :                     for 변수 in 리스트(또는 튜플, 문자열):
+                                  수행할_문장1               continue :  for 문 안의 문장을 수행하는 도중 continue 문을 만나면 for 문의 처음으로 돌아가게 된다
+                                  수행할_문장2               
+                                  ...
+  
+* 리스트 컴프리헨션의 문법 :    1) 표현식 for 항목 in 반복_가능_객체
+                                      2) 표현식 for 항목 in 반복_가능_객체 if 조건문
+
+
+
+****  파이썬 함수 ****
+
+* 파이썬 함수의 구조 :       def 함수_이름(매개변수):                         매개변수(parameter,인수,파마미터) : 함수에서 정의되어 사용되는 변수
+                                        수행할_문장1                                  인수(argument) : 함수를 호출할 때 건네주는 변수
+                                        ...                                                리턴값(결과값, 출력값, 변환값, 돌려주는 값)
+                                        return 리턴값     
+
+                                   a = 함수_이름(인수)
+                                   print(a)                              
+
+      - 입력값이 없는 함수       def say():                   - 리턴값이 없는 함수     def add(a, b):          - 입력값도, 리턴값도 없는 함수      def say(): 
+                                            return 'Hi'                                                 print("Hi")                                                           print("Hi)
+                                       a = say()                                                   a = add(3, 4)                                                       a = say()
+                                       print(a)                                                     print(a)                                                              print(a)
+                                       Hi                                                           Hi                                                                     Hi  
+                                                                                                     7  
+      - 입력값이 몇 개가 될지 모를 때는 : *매개변수                def 함수_이름(*매개변수):     
+                                                                                    수행할_문장
+                                                                                     ...
+      -  여러 개의 입력값을 받는 함수 만들기 :  *args            def add_many(*args)                
+                                                                             def add_mul(choice, *args): 
+
+      - 키워드 매개변수 :  매개변수 앞에 별 2개(**)를 붙인다.              def print_kwargs(**kwargs):
+                                                                                              print(kwargs)
+         **kwargs처럼 매개변수 이름 앞에 **을 붙이면 매개변수 kwargs는 딕셔너리가 되고 모든 Key=Value 형태의 입력값이 그 딕셔너리에 저장됨
+
+             - args는 인수를 뜻하는 영어 단어 arguments의 약자이며 관례적으로 자주 사용
+             - kwargs는 ‘keyword arguments’의 약자이며 args와 마찬가지로 관례적으로 사용
+
+* 사용자 입출력 :     - input : 사용자가 키보드로 입력한 모든 것을 문자열(str)로 저장한다.
+                                     input("안내_문구")       number = input("숫자를 입력하세요: ") 
+                                                                  print(number)
+                                                                  숫자를 입력하세요:
+                          - print 자세히 알기  :  - 큰따옴표로 둘러싸인 문자열은 + 연산과 동일하다
+                                                        : print("life"+"is"+"too short")  /  print("life" "is" "too short")  : 같은 결과값  - lifeistoo short
+                                                      - 문자열 띄어쓰기는 쉼표로 한다                                                       
+                                                        : print("life", "is", "too short") : 다른 결과값 - life is too short
+                          - 한 줄에 결괏값 출력하기 : 한 줄에 결괏값을 계속 이어서 출력하려면 매개변수 end를 사용해 끝 문자를 지정
+                                                        : for i in range(10):
+                                                              print(i, end=' ')                                 end 매개변수의 초깃값은 줄바꿈(\n) 문자
+                                                          0 1 2 3 4 5 6 7 8 9
+
+* 파일 읽고 쓰기 :         - 파일 생성하기 :  파일을 생성하기 위해 파이썬 내장 함수 open을 사용
+                                                    : 파일_객체 = open(파일_이름, 파일_열기_모드) 
+                                                        r : 읽기 모드: 파일을 읽기만 할 때 사용 
+                                                       w : 쓰기 모드: 파일에 내용을 쓸 때 사용  
+                                                        a : 추가 모드: 파일의 마지막에 새로운 내용을 추가할 때 사용
+                                            f = open("새파일.txt", "w", encoding="UTF-8")                - 한글 코딩이 깨질때 추가 입력함 : encoding="UTF-8"              
+                                            for i in range(1, 11):
+                                                data = "%d번째 줄입니다.\n" % i
+                                                f.write(data)
+                                                f.close()
+                               - 파일을 읽는 여러 가지 방법 
+
+
+
+
+* 외부 라이브러리 :    pip : 파이썬 모듈이나 패키지를 쉽게 설치할 수 있도록 도와주는 도구
+                            pip install SomePackage                    : 패키지 설치(최신버전)
+                            pip uninstall SomePackage                 : 패키지 삭제 
+                            pip install SomePackage==1.0.4           : 특정 버전으로 설치하기    
+                            pip install --upgrade SomePackage       : 최신 버전으로 업그레이드하기
+                            pip list                                           : 설치된 패키지 확인하기
+                            C:\> pip install Faker                        : Faker는 테스트용 가짜 데이터를 생성할 때 사용하는 라이브러리
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
