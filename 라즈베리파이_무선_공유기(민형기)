@@ -1,0 +1,172 @@
+✅ Raspberry pi Imager(v1.8.5) ✅
+- Ubuntu Desktop 22.04 LTS(64-bit)
+
+✅ 라즈베리파이4 - 노트북 연결하기(SSH 연결) ✅                         동영상 꼭 시청   < https://www.youtube.com/watch?v=hNXiFJv06w4 >
+1. hdmi to usb video capture 를 노트북 단자에 연결
+2. "bandicam" 에서 "v5.1.0" 다운후 설치
+3. bandicam 실행 후 "HDMI" 클릭 
+4. Device Selection    ==>    Device : USB Video 선택  /  Format : 원하는 사이즈 선택   ==>  OK
+5. hdmi to usb 케이블을 "라즈베리파이4"에 연결하면 노트북 화면에 우분투 화면이 뜬다.
+6. 라즈베리파이4 터미널  :  "우분투" 창이 뜨면 아래 프로그램 깔기 
+   1) sudo apt-get update  /  sudo apt-get upgrade
+   2) sudo apt install net-tools
+   3) ifconfig    -    wlan0 : 172.30.1.55
+   4) sudo apt install openssh-server
+7. Windows 터미널 열기(cmd 창)
+   1) ssh skw@172.30.1.55   ==>    "yes" 선택
+   2) 라즈베리파이4의 암호 입력 : 1111            ==>>     "이렇게 하면 Windows 터미널 창에서 라즈베리파이4 터미널로 들어가게 됨"
+   3) 작업후 Windows 터미널에서 "sudo shutdown -h now" 입력    ==>>     라즈베리파이4 터미널 창이 꺼짐
+   ###  이제부터 라즈베리파이4에 키보드나 마우스를 연결할 필요가 없음  ###
+
+✅ SSH로 라즈베리파이4에 Python 개발 환경 구축하기 ✅
+1. 라즈베리파이4에 전원 꼽기
+2. Windows 터미널 열기(cmd 창)   ==>>    ssh skw@172.30.1.55    ==>    "yes" 선택
+3. 라즈베리파이4의 암호 입력 : 1111      ==>>     "이렇게 하면 Windows 터미널 창에서 라즈베리파이4 터미널로 들어가게 됨"
+   1) sudo apt install python3-pip
+   2) pip3 install --upgrade pip         # 혹시 error 가 나면  "python3 -m pip config set global.break-system-packages true" 입력
+   3) sudo apt install jupyter-core
+   4) pip3 install matplotlib scikit-learn seaborn jupyter
+
+✅ SSH로 "VSCode" 와 "라즈베리파이4 터미널창" 연결하기 ✅
+1. Windows 터미널 열기(cmd 창)   ==>>    ssh skw@172.30.1.55    ==>    "yes" 선택
+2. 라즈베리파이4의 암호 입력 : 1111      ==>>     "이렇게 하면 Windows 터미널 창에서 라즈베리파이4 터미널로 들어가게 됨"
+3. Windows 에서 VSCode 화면 띄우기
+   1) "Remote - SSH"     ==>>    "install"  후에  "vscode 화면 좌측 맨 밑에 청색 좌우 화살표 선택"
+   2) 화면 위 가운데 검색창에서 "Connect to Host" 선택 후 검색창에 "skw@172.30.1.55" 입력   
+      ==>> 새로운 VSCode 창이 열림 : 가운데 검색창에 "라즈베리파이4 암호 입력 : 1111"
+      ==>> 폴더  -  "Open Folder" 선택   -   /home/skw/    "ok" 선택   -  암호 입력 : 1111
+   3) VSCode 확장팩에서 아래 "install" 할 것
+     Jupyter(ssh:172.30.1.55)
+     indent-rainbow
+     GitHub Copilot
+     Python(ssh:172.30.1.55)
+      
+
+
+✅ RealVNC 설치 ✅
+1. 라즈베리파이4 창에서의 realvnc 설치 순서
+   1) Windows 터미널창에서 라즈베리파이4 접속
+   2) realvnc server 검색   ==>>    https://www.realvnc.com/en/connect/download/vnc/    ==>     Raspberry Pi  선택    ==>    arm64   선택
+      "Download RealVNC Server"    우측 클릭후   "링크 주소 복사"        
+   3) Windows 터미널창 (라즈베리파이4에 접속되어 있는 터미널창) 에서   
+         - (Download 디렉토리)에서 아래 명령어 실행
+         - wget https://downloads.realvnc.com/download/file/vnc.files/VNC-Server-7.13.1-Linux-ARM64.deb             
+         - sudo apt install ./VNC-Server-7.13.1-Linux-ARM64.deb       
+         - sudo apt install xserver-xorg-video-dummy     
+         - sudo systemctl enable vncserver-x11-serviced.service
+         - sudo systemctl start vncserver-virtuald.service
+         - sudo apt install xserver-xorg-video-dummy
+         - sudo cp /etc/X11/vncserver-virtual-dummy.conf /etc/X11/xorg.conf
+
+         - sudo nano /etc/gdm3/custom.conf     ==>>    #WaylandEnable=False    에서    " # "   제거하고 저장하고 창 닫기
+             (nano 창에서)
+
+2. 노트북에서 viewer 설치하기
+   1) realvnc 검색   ==>>    https://www.realvnc.com/en/connect/download/viewer/     ==> Windows 버전 다운로드
+   2) RealVNC Viewer 실행   -   창에 172.30.1.55   입력    -   Username : skw    Password : 1111
+   3) RealVNC Viewer 에서 우분투 화면이 나타남
+
+3. 현재는 
+   1) Windows 터미널창에서 라즈베리파이4 터미널창으로 연결된 화면 
+   2) RealVNC Viewer 를 통해서 우분투 화면이 떠 있는 상태
+
+4. "Windows 터미널창에서 라즈베리파이4 터미널창" 에서 명령어를 입력하면 "라즈베리파이4"  에 자동으로 "새창"을 띄울때
+   (xhost 설정 방법)
+   - (Download 디렉토리)에서 아래 명령어 실행 
+   1) https://github.com/PinkWink/for_ROS2_study/blob/main/RPi%20Study/xhost-local.service
+   2) "xhost-local.service" 안에 내용을 복사하고
+   3) sudo nano /etc/systemd/system/xhost-local.service     들어가서    위 2)번 내용을 붙여넣기 : "User=skw"로 수정
+                                                                                           
+   4) sudo systemctl enable xhost-local.service
+
+5. 예시)  "Windows 터미널창에서 라즈베리파이4 터미널창" 에  
+    - (Download 디렉토리)에서 아래 명령어 실행
+   1)  export DISPLAY=:0
+       xclock                               ==>>   RealVNC Viewer 에서 "시계" 가 나타남  :  성공
+
+
+
+✅ Ap mode 설정하기(라즈베리파이4를 공유기로 사용하기) ✅
+1. "Windows 터미널창에서 라즈베리파이4 터미널창 연결"
+2. sudo apt install dnsmasq hostapd                               (dnsmasq : 소규모 네트워크 서버 구성)
+3.  sudo nano /etc/hostapd/hostapd.conf                        (hostapd : 무선 엑세스 포인트를 관리)
+   1) 검색  :  https://github.com/PinkWink/for_ROS2_study/blob/main/RPi%20Study/hostapd.conf       
+   2) "/etc/hostapd/hostapd.conf" 안에 내용을 복사하고
+   3) sudo nano /etc/hostapd/hostapd.conf  안에   위 내용을 붙여넣기     
+      ("ssid=skw_RPi2   /    wpa_passphrase=12345678 : 라즈베리파이 공유기 비번")
+4. sudo nano /etc/default/hostapd
+   1) DAEMON_CONF="/etc/hostapd/hostapd.conf"   를 붙여넣기
+5. sudo systemctl unmask hostapd                               (hostapd 재실행하기)
+6. sudo systemctl enable hostapd                                (hostapd 재실행하기)
+7. sudo nano /etc/dnsmasq.conf    안에        port=5353                                                                 붙여넣기 하기
+                                                          interface=ap0
+                                                          dhcp-range=192.168.4.2, 192.168.4.20,255.255.255.0,24h
+
+8. sudo systemctl restart dnsmasq                                (dnsmasq 재시작하기)
+9. sudo nano /etc/sysctl.conf         안에   
+    #net.ipv4.ip_forward=1   에서    " # " 삭제후 저장
+
+10. sudo apt install iw                                              (iw 설치 : 무선 네트워크(Wi-Fi) 인터페이스를 설정하고 관리하는데 사용되는 도구)
+11. sudo iw dev wlan0 interface add ap0 type __ap                           (가상 네트워크 생성하기)
+12. sudo ifconfig ap0 192.168.4.1/24 netmask 255.255.255.0                (가상 네트워크 생성하기)  
+13. sudo ifconfig ap0 up                                                            (가상 네트워크 생성하기)  
+14. ifconfig     ==>>    ap0:  내용이 뜨는것을 확인함                        (가상 네트워크 생성하기) 
+
+15. sudo nano /etc/systemd/system/pw-ap-mode.service                   (서비스 등록-링크-)
+    https://github.com/PinkWink/for_ROS2_study/blob/main/RPi%20Study/pw-ap-mode.service      내용 복사후 붙여넣기
+16. sudo systemctl daemon-reload
+17. sudo systemctl enable pw-ap-mode.service
+
+wifi 설정
+1. nano ~/wifi_setup.sh                                           (wifi_setup.sh  파일 만들기)
+   1) 검색  :   https://github.com/PinkWink/for_ROS2_study/blob/main/RPi%20Study/wifi_setup.sh
+   2) nano ~/wifi_setup.sh 에 위 내용 붙여넣기 후 저장
+2. wifi 연결(skw_RPi2)
+ 노트북 wifi에서 skw_RPi2 를 찾아 연결함 (비번 : 12345678)   ==>> "아직 인터넷 연결이 안된 상태이고, 라즈베리파이4가 공유기로만 설정된 상태임"
+3. 공유기가 바뀜(skw_RPi2) 
+  이제부터 Windows 터미널창을 열고, ssh skw@192.168.4.1  (비번 : 1234) 을 입력해야 라즈베리팡리4 터미널 창으로 들어가짐
+4. nmcli dev wifi list           (현재 노트북 주변에서 wifi 에 연결된 상태 확인)
+5. ls      ==>>    wifi_setup.sh  파일 확인
+6. sudo chmod +x wifi_setup.sh         (wifi_setup.sh 을 실행파일로 만들기)
+7. ./wifi_setup.sh
+Enter WiFi SSID :
+Enter WiFi Password : 6xf09kh030                                        
+
+##  Wi-Fi   =>  skw_RPi2    =>   DNS 서버할당   =>   편집   =>   네트워크 DNS 설정 편집 : 수동  /   IP4 켬  /  기본설정 DNS : 8.8.8.8
+##  Wi-Fi 가 집 인터넷으로 연결되어 있을때                                ==>>   ssh skw@172.30.1.55 
+##  Wi-Fi 가 skw_RPi2(라즈베리파이4 공유기)로 연결되어 있을 때      ==>>   ssh skw@192.168.4.1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1. Windows 터미널창에서 라즈베리파이4 접속 
+   sudo apt install tightvncserver
+   sudo apt install xfce4 xfce4-goodies              ==>>  gdm3 선택
+   sudo ufw allow 5901/tcp           (방화벽 해제)
+   vncserver                                               ==>> 암호 : 111111
+   vncserver -kill :1                                      
+   nano ~/ .vnc/xstartup                                ==>> startxfc4  추가 입력     -   ctrl + s    -    ctrl + c
+   vncserver
+
+2. Remote Ripple 설치  :  https://remoteripple.com/download/    ==>>   접속후 Windows 버전 다운로드
+   New Session 선택  -  Host Address : 172.30.1.55   /   Port : 5901   /   Password : 111111
+
+
+
+
+
+
+
+
+
